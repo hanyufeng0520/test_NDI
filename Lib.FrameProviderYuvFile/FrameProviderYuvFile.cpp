@@ -83,10 +83,11 @@ int CFrameProviderYuvFile::addChannel(uint32_t dwCnlID, const sFrameProvider_Par
 
 	initAudio(pCnlParameter);
 
+	m_bStop = false;
 	m_dwTimes = 0;
 	m_threadHandle = async_thread(thread_priority::normal, &CFrameProviderYuvFile::SendOneVideoFrm, this);
+	m_threadCallBack = async_thread(thread_priority::normal, &CFrameProviderYuvFile::callBack, this);
 	m_initDone = true;
-	startThread();
 	return 0;
 }
 
@@ -108,7 +109,7 @@ int CFrameProviderYuvFile::startCapture()
 
 void CFrameProviderYuvFile::callBack()
 {
-	while (isRunning())
+	while (!m_bStop)
 	{
 		if (m_queueFrame.size() < 10)//because we only have 15 for each cam
 		{
@@ -208,10 +209,11 @@ int	CFrameProviderYuvFile::loadVideoFrameFromDisk(pVFrame& _uncompFrame)
 
 void CFrameProviderYuvFile::closeChannel()
 {
-	stopThread(2000);
-
-	//if (m_threadHandle.valid())
-	//	m_threadHandle.get();
+	m_bStop = true;
+	if (m_threadCallBack.valid())
+		m_threadCallBack.get();
+	if (m_threadHandle.valid())
+		m_threadHandle.get();
 	if (m_fpVideo != nullptr)
 		fclose(m_fpVideo);
 	m_initDone = false;
@@ -227,7 +229,7 @@ VOID CALLBACK CFrameProviderYuvFile::SendVideoCB(_In_ PVOID lpParameter, _In_ BO
 
 void CFrameProviderYuvFile::SendOneVideoFrm()
 {
-	while (isRunning())
+	while (!m_bStop)
 	{
 		if (m_frameConsumed)
 		{
