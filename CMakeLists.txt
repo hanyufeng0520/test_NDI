@@ -6,6 +6,7 @@ cmake_minimum_required (VERSION 3.8)
 project ("test_NDI")
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/inc/ffmpeg ${PROJECT_SOURCE_DIR}/inc/NDI)
+#LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 
 aux_source_directory(. DIR_SRCS)
 
@@ -19,4 +20,9 @@ add_subdirectory(Lib.FrameProviderYuvFile)
 add_executable (test_NDI ${DIR_SRCS})
 
 # TODO: Add tests and install targets if needed.
+
 target_link_libraries(test_NDI Lib.Base Lib.Config Lib.FrameConsumerNDI Lib.FrameProviderYuvFile)
+target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/Processing.NDI.Lib.x64.lib)
+target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/avutil.lib)
+target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/swresample.lib)
+target_link_libraries(test_NDI Shlwapi.lib)
