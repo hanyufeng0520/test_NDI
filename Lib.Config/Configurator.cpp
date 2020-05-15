@@ -1,6 +1,8 @@
 #include "Configurator.h"
-#include <tchar.h>
+#ifdef _MSC_VER
 #include <Windows.h>
+#else
+#endif _MSC_VER
 #include "cnlInfo.h"
 #include <filesystem>
 #include <io.h>

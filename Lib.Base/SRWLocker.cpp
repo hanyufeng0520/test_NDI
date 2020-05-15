@@ -8,7 +8,13 @@ SRWLocker::SRWLocker()
 	pthread_rwlock_init(&m_lock, NULL);
 #endif _MSC_VER
 }
-
+SRWLocker::~SRWLocker()
+{
+#ifdef _MSC_VER	
+#else
+	pthread_rwlock_destory(m_lock);
+#endif _MSC_VER
+}
 void SRWLocker::lock_r()
 {
 #ifdef _MSC_VER

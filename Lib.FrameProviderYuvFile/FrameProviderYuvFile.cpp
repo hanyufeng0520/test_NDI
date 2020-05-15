@@ -76,7 +76,7 @@ int CFrameProviderYuvFile::addChannel(uint32_t dwCnlID, const sFrameProvider_Par
 	m_stCnlParameter = pCnlParameter;
 	m_pGetFrameCB = _pGetFrameCB;
 	m_dwCnlID = dwCnlID;
-	swprintf_s(m_szLogFile, MAX_PATH, (wchar_t*)_T("C:\\Logs\\frame2TCP\\ProviderYuvFile_%d.Log"), dwCnlID);
+	swprintf_s(m_szLogFile, MAX_PATH, L"C:\\Logs\\frame2TCP\\ProviderYuvFile_%d.Log", dwCnlID);
 
 	if (initVideo(pCnlParameter) != 0)
 		return -1;

@@ -16,7 +16,7 @@ class SRWLocker
 
 public:
 	SRWLocker();
-	~SRWLocker() = default;
+	~SRWLocker();
 	SRWLocker& operator=(const SRWLocker&) = delete;
 	SRWLocker(const SRWLocker &) = delete;
 

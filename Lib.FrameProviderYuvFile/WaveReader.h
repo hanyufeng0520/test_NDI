@@ -1,6 +1,8 @@
 #pragma once
-#include <tchar.h>
-#include <windows.h>
+#ifdef _MSC_VER
+#include <Windows.h>
+#else
+#endif _MSC_VER
 #include <memory>
 #include "WaveHeader.h"
 
