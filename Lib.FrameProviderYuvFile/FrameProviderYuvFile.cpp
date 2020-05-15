@@ -1,11 +1,9 @@
 #include "FrameProviderYuvFile.h"
 #include "../Lib.Base/CapturePoolMgr.h"
 #include "../Lib.Base/platform.h"
-#include <Shlwapi.h>
 #include "MarkerBuilder.h"
 #include "../Lib.Config/IConfig.h"
-#include "../Lib.Config/AudioSampleHeader.h"
-
+#include "../Lib.Base/AudioSampleHeader.h"
 // ffmpeg - i source_file -vcodec rawvideo -pix_fmt uyvy422 -t 60 -vf scale=1920:1080 out.YUV
 
 
@@ -33,7 +31,6 @@ int CFrameProviderYuvFile::initAudio(const sFrameProvider_Parameter& pCnlParamet
 {
 	char szAudioName[MAX_PATH];
 	memcpy_s(szAudioName, MAX_PATH, pCnlParameter.szFileNameAudio, MAX_PATH);
-	PathRenameExtensionA(szAudioName, ".wav");
 	m_audioReader.open(szAudioName, m_szLogFile);
 
 	m_maxAudioSample = 0;

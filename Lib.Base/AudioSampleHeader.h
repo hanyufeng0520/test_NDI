@@ -1,5 +1,5 @@
 #pragma once
-#include "../lib.Base/VideoFormatDef.h"
+#include "VideoFormatDef.h"
 namespace FFMPEG_AUDIOSAMPLE
 {
 	struct AVRational {

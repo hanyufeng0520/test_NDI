@@ -3,7 +3,7 @@
 #include <mbstring.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../lib.Base/audioFrame.h"
+#include "../Lib.Base/audioFrame.h"
 
 CWaveReader::CWaveReader()
 {

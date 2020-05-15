@@ -1,5 +1,5 @@
 #pragma once
-#include "../lib.Base/VideoFormatDef.h"
+#include "../Lib.Base/VideoFormatDef.h"
 #include "IFPInputCallBack.h"
 
 struct sFrameProvider_Parameter

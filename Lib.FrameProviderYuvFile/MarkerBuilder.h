@@ -1,5 +1,4 @@
 #pragma once
-#include <intsafe.h>
 
 class Build_Marker
 {

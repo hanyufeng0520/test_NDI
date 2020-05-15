@@ -8,7 +8,7 @@
 #include <io.h>
 #include "../Lib.Base/StringHelper.h"
 #include "../Lib.Base/CommonHelper.h"
-#include "AudioSampleHeader.h"
+#include "../Lib.Base/AudioSampleHeader.h"
 
 Configurator::Configurator()
 {
