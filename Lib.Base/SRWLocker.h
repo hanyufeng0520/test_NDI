@@ -1,9 +1,18 @@
 #pragma once
+#ifdef _MSC_VER
 #include <Windows.h>
+#else
+#include <pthread.h>
+#include <unistd.h>
+#endif _MSC_VER
 
 class SRWLocker
 {
+#ifdef _MSC_VER
 	SRWLOCK m_lock;
+#else
+	pthread_rwlock_t m_lock;
+#endif _MSC_VER
 
 public:
 	SRWLocker();
