@@ -5,6 +5,15 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("test_NDI")
 
+# 加入一个配置头文件，用于处理 CMake 对源码的设置
+configure_file (
+  "${PROJECT_SOURCE_DIR}/config.h.in"
+  "${PROJECT_BINARY_DIR}/config.h"
+  )
+
+# 是否使用自己的 MathFunctions 库
+option (_MSC_VER "Windows" ON)
+
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/inc/ffmpeg ${PROJECT_SOURCE_DIR}/inc/NDI)
 #LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
 
@@ -19,10 +28,15 @@ add_subdirectory(Lib.FrameProviderYuvFile)
 # Add source to this project's executable.
 add_executable (test_NDI ${DIR_SRCS})
 
+# 是否加入 MathFunctions 库
+if (_MSC_VER)
+    target_link_libraries(test_NDI Shlwapi.lib)
+    target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/Processing.NDI.Lib.x64.lib)
+    target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/avutil.lib)
+    target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/swresample.lib)
+endif (_MSC_VER)
+
 # TODO: Add tests and install targets if needed.
-target_link_libraries(test_NDI Shlwapi.lib)
-target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/Processing.NDI.Lib.x64.lib)
-target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/avutil.lib)
-target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/swresample.lib)
+
 
 target_link_libraries(test_NDI Lib.Base Lib.Config Lib.FrameConsumerNDI Lib.FrameProviderYuvFile)
