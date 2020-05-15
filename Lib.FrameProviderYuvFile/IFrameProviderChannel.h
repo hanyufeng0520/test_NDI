@@ -23,8 +23,14 @@ struct sFrameProvider_Parameter
 			bAutoDetect = rhs.bAutoDetect;
 			dwBoardID = rhs.dwBoardID;
 			dwSdiID = rhs.dwSdiID;
+#ifdef _MSC_VER
 			memcpy_s(szFileName, MAX_PATH, rhs.szFileName, MAX_PATH);
 			memcpy_s(szFileNameAudio, MAX_PATH, rhs.szFileNameAudio, MAX_PATH);
+#else
+			memcpy_s(szFileName, rhs.szFileName, MAX_PATH);
+			memcpy_s(szFileNameAudio, rhs.szFileNameAudio, MAX_PATH);
+#endif _MSC_VER
+
 		}
 		return *this;
 	}

@@ -8,7 +8,6 @@
 class Build_Marker;
 class CFrameProviderYuvFile :public IFrameProviderChannel
 {
-	Build_Marker *			 m_pBuildMarker = nullptr;
 	int						 m_maxAudioSample = 0;
 	sFrameProvider_Parameter m_stCnlParameter;
 	FILE*                    m_fpVideo = nullptr;
@@ -36,8 +35,6 @@ class CFrameProviderYuvFile :public IFrameProviderChannel
 	void	CloseVideoFile();
 	int		initAudio(const sFrameProvider_Parameter& pCnlParameter);
 	int		initVideo(const sFrameProvider_Parameter& pCnlParameter);
-
-	static VOID CALLBACK SendVideoCB(_In_ PVOID lpParameter, _In_ BOOLEAN TimerOrWaitFired);
 
 public:
 	CFrameProviderYuvFile();

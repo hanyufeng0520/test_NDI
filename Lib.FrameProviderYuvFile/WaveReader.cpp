@@ -19,7 +19,12 @@ CWaveReader::~CWaveReader()
 
 void CWaveReader::initLog(wchar_t* szLogFile)
 {
+#ifdef _MSC_VER
 	memcpy_s(m_szLogFile, MAX_PATH * sizeof(wchar_t), szLogFile, (wcslen(szLogFile) + 1) * sizeof(wchar_t));
+#else
+	memcpy_s(m_szLogFile, szLogFile, (wcslen(szLogFile) + 1) * sizeof(wchar_t));
+#endif _MSC_VER
+	
 }
 
 int CWaveReader::openFile(const char* _file_name)

@@ -1,7 +1,6 @@
 #include "FrameProviderYuvFile.h"
 #include "../Lib.Base/CapturePoolMgr.h"
 #include "../Lib.Base/platform.h"
-#include "MarkerBuilder.h"
 #include "../Lib.Config/IConfig.h"
 #include "../Lib.Base/AudioSampleHeader.h"
 // ffmpeg - i source_file -vcodec rawvideo -pix_fmt uyvy422 -t 60 -vf scale=1920:1080 out.YUV
@@ -15,22 +14,23 @@ CFrameProviderYuvFile::CFrameProviderYuvFile()
 	m_pGetFrameCB = nullptr;
 	m_dwCnlID = 0xFFFFFFFF;
 	m_frameConsumed = 1;
-	if (Config->isBuildMarker())
-		m_pBuildMarker = new Build_Marker(Config->getVideoWidth(), Config->getVideoHeight());
 }
 
 CFrameProviderYuvFile::~CFrameProviderYuvFile()
 {
 	closeChannel();
 	CloseVideoFile();
-	if (m_pBuildMarker)
-		delete m_pBuildMarker;
 }
 
 int CFrameProviderYuvFile::initAudio(const sFrameProvider_Parameter& pCnlParameter)
 {
 	char szAudioName[MAX_PATH];
+#ifdef _MSC_VER
 	memcpy_s(szAudioName, MAX_PATH, pCnlParameter.szFileNameAudio, MAX_PATH);
+#else
+	memcpy(szAudioName, pCnlParameter.szFileNameAudio, MAX_PATH);
+#endif _MSC_VER
+	
 	m_audioReader.open(szAudioName, m_szLogFile);
 
 	m_maxAudioSample = 0;
@@ -197,10 +197,6 @@ int	CFrameProviderYuvFile::loadVideoFrameFromDisk(pVFrame& _uncompFrame)
 	}
 
 	_uncompFrame->SetFrameID(m_dwTimes);
-
-	if (m_pBuildMarker)
-		m_pBuildMarker->buildMarker((byte*)_uncompFrame->getBuffer(), m_dwTimes, m_dwCnlID);
-
 	return 0;
 }
 
@@ -216,12 +212,6 @@ void CFrameProviderYuvFile::closeChannel()
 	m_initDone = false;
 	m_pGetFrameCB = nullptr;
 	m_dwCnlID = 0xFFFFFFFF;
-}
-
-VOID CALLBACK CFrameProviderYuvFile::SendVideoCB(_In_ PVOID lpParameter, _In_ BOOLEAN)
-{
-	CFrameProviderYuvFile* pthis = (CFrameProviderYuvFile*)lpParameter;
-	pthis->SendOneVideoFrm();
 }
 
 void CFrameProviderYuvFile::SendOneVideoFrm()
