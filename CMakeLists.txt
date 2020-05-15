@@ -12,7 +12,8 @@ configure_file (
   )
 
 # 是否使用自己的 MathFunctions 库
-option (_MSC_VER "Windows" ON)
+option (_MSC_VER
+       "Windows" ON)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/inc/ffmpeg ${PROJECT_SOURCE_DIR}/inc/NDI)
 #LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
