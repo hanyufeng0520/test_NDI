@@ -1,12 +1,6 @@
 ﻿#include "SemaphoreClock.h"
 #include <climits>
 
-#ifdef _MSC_VER
-#include <Windows.h>
-#else
-#endif _MSC_VER
-
-
 SemaphoreClock::SemaphoreClock()
 {
 #ifdef _MSC_VER
@@ -21,11 +15,11 @@ SemaphoreClock::~SemaphoreClock()
 #ifdef _MSC_VER
 	CloseHandle(m_handle);
 #else
-	sem_destory(&m_handle);
+	sem_destroy(&m_handle);
 #endif _MSC_VER	
 }
 
-void SemaphoreClock::raiseEvent() const
+void SemaphoreClock::raiseEvent()
 {
 #ifdef _MSC_VER
 	ReleaseSemaphore(m_handle, 1, nullptr);
@@ -35,7 +29,7 @@ void SemaphoreClock::raiseEvent() const
 	
 }
 
-bool SemaphoreClock::waitEvent(int nTimeOut) const
+bool SemaphoreClock::waitEvent(int nTimeOut)
 {
 #ifdef _MSC_VER
 	return WaitForSingleObject(m_handle, nTimeOut) == WAIT_OBJECT_0;

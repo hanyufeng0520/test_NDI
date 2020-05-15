@@ -6,14 +6,12 @@
 #include "cnlInfo.h"
 #include <filesystem>
 #include <io.h>
-#include "../Lib.Base/StringHelper.h"
-#include "../Lib.Base/CommonHelper.h"
 #include "../Lib.Base/AudioSampleHeader.h"
-
+static constexpr char const* BACKEND_CONFIG = "C:\ProgramData\SimplyLive.TV\Vibox\Backend\Config.ini";
 Configurator::Configurator()
 {
 	setDefault();
-	sprintf_s(m_strConfigPath, R"(%sConfig.ini)", GetAppPathA().c_str());
+	sprintf_s(m_strConfigPath, "%s", BACKEND_CONFIG);
 	load();
 }
 

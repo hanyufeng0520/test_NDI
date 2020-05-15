@@ -12,7 +12,7 @@ SRWLocker::~SRWLocker()
 {
 #ifdef _MSC_VER	
 #else
-	pthread_rwlock_destory(m_lock);
+	pthread_rwlock_destroy(&m_lock);
 #endif _MSC_VER
 }
 void SRWLocker::lock_r()

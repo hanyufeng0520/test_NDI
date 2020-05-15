@@ -1,3 +1,4 @@
+#include <string.h>
 #include "audioFrame.h"
 
 AudioFrame::AudioFrame(int  _monoCnt)
