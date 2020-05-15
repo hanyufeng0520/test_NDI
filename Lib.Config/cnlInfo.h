@@ -15,7 +15,7 @@
 #define NB_LIVETGA		2
 enum CamID :uint32_t  //this enum only using in BE.
 {
-	ID_InValidCam = -1,
+	ID_InValidCam = 0xFFFFFFF,
 	ID_Cam_InValid = ID_InValidCam,
 	ID_Cam_0 = 0,
 	ID_Cam_1,

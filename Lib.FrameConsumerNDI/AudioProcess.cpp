@@ -1,5 +1,5 @@
 #include "AudioProcess.h"
-#include "../lib.Config/IConfig.h"
+#include "../Lib.Config/IConfig.h"
 
 CAudioProcess::CAudioProcess()
 {

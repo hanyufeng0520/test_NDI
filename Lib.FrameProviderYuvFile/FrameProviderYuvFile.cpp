@@ -3,6 +3,10 @@
 #include "../Lib.Base/platform.h"
 #include "../Lib.Config/IConfig.h"
 #include "../Lib.Base/AudioSampleHeader.h"
+#ifndef _MSC_VER
+#include <unistd.h>
+#endif 
+
 // ffmpeg - i source_file -vcodec rawvideo -pix_fmt uyvy422 -t 60 -vf scale=1920:1080 out.YUV
 
 
@@ -10,7 +14,6 @@ CFrameProviderYuvFile::CFrameProviderYuvFile()
 {
 	m_maxAudioSample = 0;
 	m_initDone = false;
-	m_hTimerRender = nullptr;
 	m_pGetFrameCB = nullptr;
 	m_dwCnlID = 0xFFFFFFFF;
 	m_frameConsumed = 1;
@@ -48,7 +51,11 @@ int CFrameProviderYuvFile::initAudio(const sFrameProvider_Parameter& pCnlParamet
 
 int CFrameProviderYuvFile::initVideo(const sFrameProvider_Parameter& pCnlParameter)
 {
-	if (fopen_s(&m_fpVideo, pCnlParameter.szFileName, "rb") != 0)
+#ifndef _MSC_VER
+#define fopen_s(pFile,filename,mode) ((*(pFile))=fopen((filename),  (mode)))==NULL
+#endif 
+	fopen_s(&m_fpVideo, pCnlParameter.szFileName, "rb");
+	if (m_fpVideo == nullptr)
 	{
 		printf("CFrameProviderYuvFile::addChannel Failed.Open video file %s failed.", pCnlParameter.szFileName);
 		return -1;
@@ -63,7 +70,11 @@ int CFrameProviderYuvFile::initVideo(const sFrameProvider_Parameter& pCnlParamet
 		CloseVideoFile();
 		return -1;
 	}
+#ifdef _MSC_VER
 	_fseeki64(m_fpVideo, 0, SEEK_SET);
+#else
+	fseeko64(m_fpVideo, 0, SEEK_SET);
+#endif 	
 
 	return 0;
 }
@@ -73,8 +84,11 @@ int CFrameProviderYuvFile::addChannel(uint32_t dwCnlID, const sFrameProvider_Par
 	m_stCnlParameter = pCnlParameter;
 	m_pGetFrameCB = _pGetFrameCB;
 	m_dwCnlID = dwCnlID;
+#ifdef _MSC_VER
 	swprintf_s(m_szLogFile, MAX_PATH, L"C:\\Logs\\frame2TCP\\ProviderYuvFile_%d.Log", dwCnlID);
-
+#else 
+	//
+#endif
 	if (initVideo(pCnlParameter) != 0)
 		return -1;
 
@@ -123,10 +137,19 @@ void CFrameProviderYuvFile::callBack()
 				m_queueAudio.push(aFrame);
 				m_locker.unlock();
 			}
+#ifdef _MSC_VER
 			Sleep(1);
+#else
+			sleep(1);
+#endif 
+		
 		}
 		else
+#ifdef _MSC_VER
 			Sleep(5);
+#else
+			sleep(5);
+#endif 
 	}
 }
 
@@ -187,8 +210,11 @@ int	CFrameProviderYuvFile::loadVideoFrameFromDisk(pVFrame& _uncompFrame)
 	{
 		printf("Failed to load frame. Loop\n");
 
-		_fseeki64(m_fpVideo, 0, SEEK_SET);	// try again from start
-
+#ifdef _MSC_VER
+		_fseeki64(m_fpVideo, 0, SEEK_SET);
+#else
+		fseeko64(m_fpVideo, 0, SEEK_SET);
+#endif 
 		if (_uncompFrame->loadFromFile(m_fpVideo) != 0)
 		{
 			_uncompFrame->setToBlack();
@@ -238,10 +264,17 @@ void CFrameProviderYuvFile::SendOneVideoFrm()
 				--m_frameConsumed;
 				m_pGetFrameCB->cb(m_dwCnlID, _uncompFrame, nullptr, nullptr, _aFrame);
 			}
-			else
-				Sleep(5);
+#ifdef _MSC_VER
+			Sleep(5);
+#else
+			sleep(5);
+#endif 
 		}
 		else
+#ifdef _MSC_VER
 			Sleep(5);
+#else
+			sleep(5);
+#endif 
 	}
 }

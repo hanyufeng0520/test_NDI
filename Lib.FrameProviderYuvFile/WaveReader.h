@@ -1,8 +1,5 @@
 #pragma once
-#ifdef _MSC_VER
-#include <Windows.h>
-#else
-#endif _MSC_VER
+#include "../Lib.Base/platform.h"
 #include <memory>
 #include "WaveHeader.h"
 
@@ -11,8 +8,8 @@ class AudioFrame;
 class CWaveReader
 {
 	wav_t m_wavInfo;
-	BYTE* m_pRawWave;
-	wchar_t m_szLogFile[MAX_PATH];
+	unsigned char* m_pRawWave;
+	wchar_t *m_szLogFile;
 	void  initLog(wchar_t* szLogFile);
 	int   openFile(const char* file_name);
 	int   checkFileHeader();
