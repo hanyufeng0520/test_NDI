@@ -5,13 +5,13 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("test_NDI")
 
-# 加入一个配置头文件，用于处理 CMake 对源码的设置
+# 
 configure_file (
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_BINARY_DIR}/config.h"
   )
 
-# 是否使用自己的 MathFunctions 库
+# 
 option (_MSC_VER
        "Windows" ON)
 
@@ -29,7 +29,7 @@ add_subdirectory(Lib.FrameProviderYuvFile)
 # Add source to this project's executable.
 add_executable (test_NDI ${DIR_SRCS})
 
-# 是否加入 MathFunctions 库
+# WINDOWS
 if (_MSC_VER)
     target_link_libraries(test_NDI Shlwapi.lib)
     target_link_libraries(test_NDI ${PROJECT_SOURCE_DIR}/lib/Processing.NDI.Lib.x64.lib)
